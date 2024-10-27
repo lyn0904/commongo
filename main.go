@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/lyn0904/commongo/common"
+	"github.com/lyn0904/commongo/common/mysql"
+	"github.com/lyn0904/commongo/common/redis"
+	"github.com/lyn0904/commongo/common/web"
 )
 
 type User struct {
@@ -14,18 +16,18 @@ type User struct {
 }
 
 func main() {
-	common.NewRedisClient("localhost:6379", "", 0)
-	mysqlHelper := common.NewMysqlHelper("root", "123456", "localhost:3306", "gotest")
+	redis.NewRedisClient("localhost:6379", "", 0)
+	mysqlHelper := mysql.NewMysqlHelper("root", "123456", "localhost:3306", "gotest")
 	mysqlHelper.CreateTable("user", User{})
-	webGin := common.NewWebGin("8088")
+	webGin := web.NewWebGin("8088")
 	webGin.AddPostRequestHandler("poet", func(context *gin.Context) {
 		file, err := context.FormFile("file")
 		if err != nil {
-			common.ReturnFail(context, "上传失败", err.Error())
+			web.ReturnFail(context, "上传失败", err.Error())
 			return
 		}
 		context.SaveUploadedFile(file, "./"+file.Filename)
-		common.ReturnSuccess(context, "成功", nil)
+		web.ReturnSuccess(context, "成功", nil)
 	})
 	webGin.GetEngine().Use(func(context *gin.Context) {
 		context.Next()

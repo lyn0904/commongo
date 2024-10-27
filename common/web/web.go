@@ -1,4 +1,4 @@
-package common
+package web
 
 import (
 	"encoding/json"
@@ -8,36 +8,36 @@ import (
 	"net/http"
 )
 
-type WebGin struct {
+type Web struct {
 	port   string
 	engine *gin.Engine
 }
 
-func NewWebGin(port string) *WebGin {
+func NewWeb(port string) *Web {
 	engine := gin.Default()
-	webGin := WebGin{
+	web := Web{
 		port:   port,
 		engine: engine,
 	}
-	return &webGin
+	return &web
 }
 
 // Run 运行
-func (w *WebGin) Run() {
+func (w *Web) Run() {
 	_ = w.engine.Run(":" + w.port)
 }
 
-func (w *WebGin) GetEngine() *gin.Engine {
+func (w *Web) GetEngine() *gin.Engine {
 	return w.engine
 }
 
 // AddPostRequestHandler 添加请求处理器
-func (w *WebGin) AddPostRequestHandler(path string, handler gin.HandlerFunc) {
+func (w *Web) AddPostRequestHandler(path string, handler gin.HandlerFunc) {
 	w.engine.POST(path, handler)
 }
 
 // AddGetRequestHandler 添加请求处理器
-func (w *WebGin) AddGetRequestHandler(path string, handler gin.HandlerFunc) {
+func (w *Web) AddGetRequestHandler(path string, handler gin.HandlerFunc) {
 	w.engine.GET(path, handler)
 }
 

@@ -1,4 +1,4 @@
-package common
+package mysql
 
 import (
 	_ "database/sql"
@@ -8,11 +8,11 @@ import (
 	"reflect"
 )
 
-type MysqlHelper struct {
+type Mysql struct {
 	db *sqlx.DB
 }
 
-func NewMysqlHelper(userName, password, host, dbName string) MysqlHelper {
+func NewMysqlHelper(userName, password, host, dbName string) Mysql {
 	url := userName + ":" + password + "@tcp(" + host + ")/" + dbName + "?charset=utf8mb4&parseTime=True"
 	db, err := sqlx.Connect("mysql", url)
 	if err != nil {
@@ -20,7 +20,7 @@ func NewMysqlHelper(userName, password, host, dbName string) MysqlHelper {
 	}
 	db.SetMaxOpenConns(20) // 设置数据库连接池的最大连接数
 	db.SetMaxIdleConns(10) // 设置数据库连接池的最大空闲连接数
-	mysqlHelper := MysqlHelper{
+	mysqlHelper := Mysql{
 		db: db,
 	}
 	err = db.Ping()
@@ -33,7 +33,7 @@ func NewMysqlHelper(userName, password, host, dbName string) MysqlHelper {
 }
 
 // CreateTable 创建表
-func (h *MysqlHelper) CreateTable(tableName string, tableStruct any) {
+func (h *Mysql) CreateTable(tableName string, tableStruct any) {
 	f := reflect.TypeOf(tableStruct)
 	var sql = "create table if not exists `" + tableName + "`(id bigint primary key auto_increment,"
 	size := f.NumField()
