@@ -1,4 +1,4 @@
-module commongo
+module github.com/lyn0904/commongo
 
 go 1.23.0
 

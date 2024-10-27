@@ -1,8 +1,8 @@
 package main
 
 import (
-	"commongo/common"
 	"github.com/gin-gonic/gin"
+	"github.com/lyn0904/commongo/common"
 )
 
 type User struct {
