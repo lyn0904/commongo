@@ -19,8 +19,8 @@ func main() {
 	redis.NewRedisClient("localhost:6379", "", 0)
 	mysqlHelper := mysql.NewMysqlHelper("root", "123456", "localhost:3306", "gotest")
 	mysqlHelper.CreateTable("user", User{})
-	webGin := web.NewWebGin("8088")
-	webGin.AddPostRequestHandler("poet", func(context *gin.Context) {
+	web := web.NewWeb("8088")
+	web.AddPostRequestHandler("poet", func(context *gin.Context) {
 		file, err := context.FormFile("file")
 		if err != nil {
 			web.ReturnFail(context, "上传失败", err.Error())
@@ -29,10 +29,10 @@ func main() {
 		context.SaveUploadedFile(file, "./"+file.Filename)
 		web.ReturnSuccess(context, "成功", nil)
 	})
-	webGin.GetEngine().Use(func(context *gin.Context) {
+	web.GetEngine().Use(func(context *gin.Context) {
 		context.Next()
 	})
-	webGin.Run()
+	web.Run()
 
 	//common.Blocking()
 }

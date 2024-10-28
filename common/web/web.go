@@ -42,25 +42,25 @@ func (w *Web) AddGetRequestHandler(path string, handler gin.HandlerFunc) {
 }
 
 // ParserRequest 解析请求数据
-func ParserRequest(context *gin.Context) map[string]interface{} {
+func (w *Web) ParserRequest(context *gin.Context) map[string]interface{} {
 	var resJSONObj map[string]any
 	data, err := io.ReadAll(context.Request.Body)
 	if err != nil {
 		fmt.Println(err)
-		ReturnFail(context, "参数解析失败", nil)
+		w.ReturnFail(context, "参数解析失败", nil)
 		return nil
 	}
 	err = json.Unmarshal(data, &resJSONObj)
 	if err != nil {
 		fmt.Println(err)
-		ReturnFail(context, "参数解析失败", nil)
+		w.ReturnFail(context, "参数解析失败", nil)
 		return nil
 	}
 	return resJSONObj
 }
 
 // ReturnSuccess 返回成功
-func ReturnSuccess(context *gin.Context, msg string, data any) {
+func (w *Web) ReturnSuccess(context *gin.Context, msg string, data any) {
 	var jsonObj = make(map[string]any)
 	jsonObj["code"] = 1
 	jsonObj["msg"] = msg
@@ -71,7 +71,7 @@ func ReturnSuccess(context *gin.Context, msg string, data any) {
 }
 
 // ReturnFail 返回失败
-func ReturnFail(context *gin.Context, msg string, data any) {
+func (w *Web) ReturnFail(context *gin.Context, msg string, data any) {
 	var jsonObj = make(map[string]any)
 	jsonObj["code"] = 0
 	jsonObj["msg"] = msg
@@ -82,7 +82,7 @@ func ReturnFail(context *gin.Context, msg string, data any) {
 }
 
 // ReturnCustom 返回失败
-func ReturnCustom(context *gin.Context, code int, msg string, data any) {
+func (w *Web) ReturnCustom(context *gin.Context, code int, msg string, data any) {
 	var jsonObj = make(map[string]any)
 	jsonObj["code"] = code
 	jsonObj["msg"] = msg
