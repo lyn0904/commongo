@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lyn0904/commongo/common/mysql"
 	"github.com/lyn0904/commongo/common/redis"
+	"github.com/lyn0904/commongo/common/sqlite"
 	"github.com/lyn0904/commongo/common/web"
 )
 
@@ -16,6 +17,10 @@ type User struct {
 }
 
 func main() {
+	sqlite := sqlite.NewSqlite("./hell.db")
+	sqlite.CreateTable("user", User{})
+	sqlite.Db.Exec("delete from user where id=?", 1)
+	sqlite.Db.Exec("insert into user (userName,password) values (?,?)", "嘎嘎", "321")
 	redis.NewRedisClient("localhost:6379", "", 0)
 	mysqlHelper := mysql.NewMysqlHelper("root", "123456", "localhost:3306", "gotest")
 	mysqlHelper.CreateTable("user", User{})
